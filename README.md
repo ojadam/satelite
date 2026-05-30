@@ -2,7 +2,7 @@
 
 ## What is this?
 
-I grabbed about **30k galaxies** from SDSS. That is real survey data, not fake numbers. I put them on a **3D map** and asked a simple question: are they spread out like random dots, or bunched up the way people talk about the **cosmic web**?
+I mapped around 30000 galaxies from the from the Sloan Digital Sky Survey (SDSS) into 3D moving space and tested whether their positions are random or actually make sense with modern physics and large-scale structure of cosmic web.
 
 ## What I actually did
 
