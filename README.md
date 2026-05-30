@@ -36,7 +36,7 @@ I cut the grid into **16 x 16 x 16** chunks and trained a **3D autoencoder** to 
 
 ## Results (plots)
 
-All figures are in `results/` if you clone the repo. They also show up here on GitHub — no need to open files one by one.
+All plots are in `results/` in the repo. They display on GitHub in this file.
 
 ### Overview
 
@@ -44,37 +44,37 @@ All figures are in `results/` if you clone the repo. They also show up here on G
 
 ### Are galaxies clumped vs random?
 
-Blue = real SDSS sample. Red = same number of points placed randomly in the same box. Green = the difference. If structure is real, the green line should sit above zero on the left (small separations).
+**Blue** = real SDSS data. **Red** = the same number of random points in the same box. **Green** = the difference. On small separations, green sits above zero. The real sample is more clustered than random.
 
 ![Correlation: data vs random](results/correlation_comparison.png)
 
 ### Where the groups are
 
-Each color is a DBSCAN cluster. Gray = not assigned to a cluster. You can see big clumps instead of an even sprinkle.
+Each color is one DBSCAN cluster. **Gray** = no cluster assigned. The map shows large clusters, not a uniform spread.
 
 ![Galaxy positions by cluster](results/positions_clusters.png)
 
 ### Density, voids, and filaments
 
-Top row: how many galaxies per voxel. Bottom row: low-density “void” areas (blue) and high-density “filament” areas (orange) on top of the map.
+**Top row:** galaxy count per voxel. **Bottom row:** low-density void regions (blue) and high-density filament regions (orange).
 
 ![Density structure](results/density_structure.png)
 
 ### How far apart galaxies sit
 
-Histogram of “distance to your closest neighbor.” The spike on the left means many galaxies have a nearby buddy — another sign they are not random.
+Histogram of distance to the nearest neighbor. The left-side peak shows many galaxies have a close neighbor. The spacing is not random.
 
 ![Nearest-neighbor distances](results/nearest_neighbors.png)
 
 ### Three views of the same cloud
 
-Same 30k points seen from xy, xz, and yz — helps see depth and filaments.
+The same **30,000** points in **xy**, **xz**, and **yz** projection. Three angles on one cloud.
 
 ![3D projections](results/projections_3panel.png)
 
-### ML: unusual density patches
+### ML: high-error density patches
 
-The autoencoder struggled most on these small 3D chunks (higher reconstruction error = less “typical” for this dataset).
+These **16 x 16 x 16** chunks have the highest autoencoder reconstruction error in the run. High error = the patch differs from most other patches in the grid.
 
 ![Anomaly patches](results/anomaly_patches.png)
 
@@ -89,7 +89,7 @@ pip install -r requirements.txt
 python run.py all
 ```
 
-First run hits SDSS over the network and saves `data/galaxies.csv`. After that you can redo analysis without re-downloading:
+The first run downloads from SDSS and writes `data/galaxies.csv`. Later runs use that file:
 
 ```bash
 python run.py patterns
@@ -101,8 +101,8 @@ python run.py analyze
 
 Python, TensorFlow, Astropy, astroquery, scikit-learn, matplotlib.
 
-## Caveats (read this if you're an astronomer)
+## Caveats (if you know astronomy)
 
-This is a portfolio / learning project. The correlation estimator is simplified, the grid is only 64³, and the autoencoder has no labels — "anomalies" just mean atypical patches, not discoveries.
+The grid is **64 x 64 x 64** only. The autoencoder has no labels. High-error patches are not discoveries. They are patches that differ from the average density pattern.
 
 Data: [SDSS](https://www.sdss.org/).
