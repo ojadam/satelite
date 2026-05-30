@@ -2,36 +2,36 @@
 
 ## What is this?
 
-I pulled ~30k galaxies from SDSS (real survey data, not made up), turned them into a 3D map, and checked if they're scattered randomly or clumped up like people say the "cosmic web" should look.
+I grabbed about **30k galaxies** from SDSS. That is real survey data, not fake numbers. I put them on a **3D map** and asked a simple question: are they spread out like random dots, or bunched up the way people talk about the **cosmic web**?
 
 ## What I actually did
 
-Here is the pipeline in plain terms, step by step.
+Step by step, no jargon wall.
 
-**1. Get real galaxy data from SDSS**  
-I downloaded about 30,000 galaxies from the Sloan Digital Sky Survey. For each one I have where it sits on the sky (right ascension and declination) and how far away it is (redshift). Redshift is basically “how much the light is stretched” — we use it to estimate distance.
+**1. Get galaxy data from SDSS**  
+I downloaded ~**30,000 galaxies** from the Sloan Digital Sky Survey. Each one has a spot on the sky (right ascension + declination) and a **redshift** (how stretched the light is). We use redshift to guess how far away it is.
 
-**2. Turn sky coordinates into a 3D map**  
-RA and dec alone are directions, not a full position in space. I used standard astronomy libraries to convert each galaxy into x, y, z in megaparsecs (Mpc). One megaparsec is a huge distance unit astronomers use. After this step you can imagine a cloud of points floating in a box — that is our chunk of the universe.
+**2. Make a 3D map**  
+RA and dec only tell you a direction. They do not give you a full position in space. I used normal astronomy code to turn each galaxy into **x, y, z** in megaparsecs (Mpc). A megaparsec is just a giant distance unit. After this you get a **cloud of points in a box**. That box is our little slice of the universe.
 
-**3. Build a simple density grid**  
-I divided that 3D box into 64 × 64 × 64 small cubes (like Minecraft blocks). I counted how many galaxies fell into each cube. Bright / hot spots on the grid mean “lots of galaxies here.” Dark spots mean “almost empty.” That grid is a rough picture of structure — clumps and gaps — not a photo from a telescope.
+**3. Count galaxies in a grid**  
+I chopped the box into **64 x 64 x 64** tiny cubes (think Minecraft). I counted how many galaxies landed in each cube. **Hot spots** = lots of galaxies. **Cold spots** = almost none. That grid is a rough map of clumps and holes. It is not a telescope photo.
 
-**4. Look for patterns and compare to random**  
-- **Grouping:** I ran DBSCAN, which finds groups of points that sit close together. If galaxies were random, you would not see so many big clumps.  
-- **Voids:** I marked cubes with very few galaxies as “void-like” — empty-ish regions between the clumps.  
-- **Correlation:** I measured whether galaxy pairs tend to be closer than you would expect if you shuffled the same 30,000 points randomly inside the same box. If the real data wins, structure is real, not luck.
+**4. Check patterns vs random**  
+- **Grouping:** I ran DBSCAN. It finds tight clusters of points. Random scatter would not give you this many big clumps.  
+- **Voids:** Cubes with almost no galaxies = empty-ish gaps between the clumps.  
+- **Correlation:** I checked if galaxy pairs sit closer than you'd get if you shuffled the same 30k points inside the same box. If real data beats random, the structure is real, not luck.
 
-**5. Small machine-learning piece**  
-I cut the density grid into little 16 × 16 × 16 cubes and trained a 3D autoencoder to copy them back. Most cubes look similar (sparse, a few bright voxels). Where the model reconstructs badly, that cube is a bit unusual compared to the rest. It is not a labeled “discovery” — just “this patch looks different.”
+**5. ML bit**  
+I cut the grid into **16 x 16 x 16** chunks and trained a **3D autoencoder** to rebuild them. Most chunks look the same (mostly empty, few bright cells). Where the model messes up the rebuild, that chunk looks **weird** compared to the rest. That is not a named discovery. It is just "this patch looks off."
 
-### What the numbers said (on my run)
+### What the numbers said (my run)
 
-- **30,000 galaxies**, distances roughly between redshift 0.01 and 0.25 (relatively nearby in cosmic terms).  
-- **170 groups** found by DBSCAN; about **53%** of galaxies belonged to some group (the rest were loners or in-between).  
-- The **two biggest groups** had about **4,200** and **3,900** galaxies — clear mega-clumps in this sample.  
-- **Median distance to the nearest other galaxy: ~2 Mpc** — many galaxies have a neighbor much closer than the average spacing would suggest if they were sprinkled at random.  
-- **Versus a random catalog in the same box:** at small scales the clustering score was about **~1.6 higher** than random. In simple words: galaxies like having neighbors nearby more than random points do.
+- **30,000 galaxies**, redshift about **0.01 to 0.25** (close-ish in cosmic terms).  
+- **170 groups** from DBSCAN. About **53%** of galaxies landed in some group. The rest were loners or in-between.  
+- The **two biggest groups** had ~**4,200** and ~**3,900** galaxies. That is fat clumps in this sample.  
+- **Median gap to your nearest neighbor: ~2 Mpc.** Lots of galaxies sit way closer to another one than you'd expect from random sprinkling.  
+- **Vs a random catalog in the same box:** clustering score was about **1.6x** higher at small scales. Plain English: galaxies like having neighbors nearby more than random points do.
 
 
 ## Results (plots)
